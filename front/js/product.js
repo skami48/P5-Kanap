@@ -1,10 +1,3 @@
-const queryString = window.location.search;
-
-const urlParams = new URLSearchParams(queryString);
-const kanapID = urlParams.get('id'); //get kanap ID from link
-
-
-getKanapElements(); //start
 function fillElements(serverValue){ // fill the page with info
     
     let imageElem = document.createElement("img");
@@ -12,21 +5,22 @@ function fillElements(serverValue){ // fill the page with info
     document.getElementsByClassName("item__img")[0].appendChild(imageElem);
 
     let title = document.getElementById("title");
-    title.innerHTML = serverValue.name
+    title.innerText = serverValue.name
 
     let prix = document.getElementById("price");
-    prix.innerHTML = serverValue.price
+    prix.innerText = serverValue.price
     let description = document.getElementById("description");
-    description.innerHTML = serverValue.description
+    description.innerText = serverValue.description
     let colors = document.getElementById("colors");
     for (let i = 0 ; i< serverValue.colors.length;i++){
         let color = document.createElement("option");
         color.setAttribute("value",serverValue.colors[i]);
-        color.innerHTML = serverValue.colors[i]
+        color.innerText = serverValue.colors[i]
         colors.appendChild(color);
 
     }
 
+    kanapValue = serverValue;
 
 }
 
@@ -46,3 +40,45 @@ function getKanapElements(){ //get the kanap info from APi
 
 }
 
+function getselectedcolor(){
+    let color = document.getElementById("colors");
+    console.log(color.value);
+    
+}
+
+
+const queryString = window.location.search;
+
+const urlParams = new URLSearchParams(queryString);
+const kanapID = urlParams.get('id'); //get kanap ID from link
+
+var kanapValue= undefined;
+
+
+let kanapList = [];
+getKanapElements(); //start
+
+
+let chart = document.getElementById("addToCart");
+chart.addEventListener("click",function(event){
+    event.preventDefault();
+
+    if(document.getElementById("colors").value != 0){
+        for (let i = 0;i<kanapValue.colors.length;i++){
+            if (document.getElementById("colors").value == kanapValue.colors[i] ){
+                if(kanapList[i]== undefined){
+                    kanapList[i] = 0;
+                }
+
+                kanapList[i] += parseInt(document.getElementById("quantity").value);
+
+        
+            }
+        }
+        localStorage.setItem(kanapID,kanapList);
+    }
+
+    
+
+
+});

@@ -21,9 +21,28 @@ for (let i = 0 ;i < kanaplist.length;i++){
     element.setAttribute("href", "./product.html?id="+kanaplist[i]._id)
 
     liste.appendChild(element);
-    element.innerHTML= '<article><img src="'+kanaplist[i].imageUrl+'" alt="'+kanaplist[i].altTxt+'"><h3 class="productName">'+kanaplist[i].name+'</h3><p class="productDescription">'+kanaplist[i].description+'</p></article>';
+    //element.innerHTML= '<article><img src="'+kanaplist[i].imageUrl+'" alt="'+kanaplist[i].altTxt+'"><h3 class="productName">'+kanaplist[i].name+'</h3><p class="productDescription">'+kanaplist[i].description+'</p></article>';
+    let article = element.appendChild (addElement("article"));
+    let img = article.appendChild(addElement("img","src",kanaplist[i].imageUrl));
+    img.setAttribute("alt",kanaplist[i].altTxt);
+    article.appendChild(addElement("h3","class","productName",kanaplist[i].name));
+    article.appendChild(addElement("p","class","productDescription",kanaplist[i].description));
 
+    
 }
+}
+
+function addElement(type = "div",attribute = "", attributeValue = "",innerText){
+    let element = document.createElement(type);
+    if(attribute!= ""){
+        element.setAttribute(attribute,attributeValue);
+
+    }
+    if(innerText!=undefined){
+        element.innerText = innerText;
+    }
+    return element;
+
 }
 
 

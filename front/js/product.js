@@ -1,11 +1,11 @@
 const queryString = window.location.search;
 
 const urlParams = new URLSearchParams(queryString);
-const kanapID = urlParams.get('id');
+const kanapID = urlParams.get('id'); //get kanap ID from link
 
 
-getKanapElements();
-function fillElements(serverValue){
+getKanapElements(); //start
+function fillElements(serverValue){ // fill the page with info
     
     let imageElem = document.createElement("img");
     imageElem.setAttribute("src",serverValue.imageUrl);
@@ -30,7 +30,7 @@ function fillElements(serverValue){
 
 }
 
-function getKanapElements(){
+function getKanapElements(){ //get the kanap info from APi
     fetch("http://127.0.0.1:3000/api/products/"+kanapID).then(function(result){
         if(result.ok){
             return result.json();}})

@@ -24,7 +24,7 @@ function fillcartElement(elementID,localStorageElementKey, colorArray){
 
         let elementNumber =  parseInt(colorArray[i]);
 ;
-        if( (elementNumber!= 0)){
+        if( (elementNumber!= 0 && elementNumber)){
             let article = document.createElement("article");
             let section = document.getElementById("cart__items");
             section.appendChild(article)
@@ -69,6 +69,7 @@ for (let i = 0 ; i< localStorage.length;i++){
             console.log(localStorage.key(i)+" found");
             let colorArray =localStorage.getItem(localStorage.key(i)); 
             colorArray = colorArray.split(",");
+            console.log('localStorageValue is : ',colorArray )
             fillcartElement(kanaplist[x],localStorage.key(i),colorArray);
             
 
@@ -119,8 +120,9 @@ async function CalculatePrice(){
         const element = kanapCartArray[i];
         let kanapNumber = element.getElementsByClassName("itemQuantity")[0];
         let elementID = element.getAttribute("data-id");
-        let singlePriceElement = await GetSingleKanap(elementID)
-        totalKanapPrice += parseInt(kanapNumber.getAttribute("value"))*await  singlePriceElement.price ;
+        let singleKanapElement = await GetSingleKanap(elementID)
+        console.log(parseInt(kanapNumber.getAttribute("value")) + "_nombre");
+        totalKanapPrice += parseInt(kanapNumber.getAttribute("value"))*await  singleKanapElement.price ;
         totalKanap +=parseInt(kanapNumber.getAttribute("value"))
     }
     console.log(totalKanapPrice);
@@ -134,13 +136,57 @@ async function CalculatePrice(){
 
 }
 
+async function UpdateCart(kanap,cart__item){
+    let kanapList =await GetKanapList();
+    for (let i = 0; i < await kanapList.length; i++) {
+        const element = await kanapList[i]._id;
+        if (element == cart__item.getAttribute("data-id")){
+            console.log(kanapList[i].colors);
+            for (let index = 0; index < kanapList[i].colors.length; index++) {
+                const color = kanapList[i].colors[index];
+                let DataStoreArray = [];
+                if(cart__item.getAttribute("data-color") == color){
+                  DataStoreArray[index] =  parseInt(kanap.setAttribute("value",upDateKanapQuantity[i].value));
+                  console.log("DataStoreArray " + DataStoreArray)
+                  localStorage.setItem(element,DataStoreArray);
+                }/*else{
+                    let oldStrore = localStorage.getItem(element);
+                    console.log("oldStrore " + oldStrore);
+                    oldStrore = oldStrore.split(",")
+                    console.log("oldStrore " +oldStrore);
+                    DataStoreArray[index] = oldStrore[index];
+                }
+                localStorage.setItem(element,DataStoreArray);*/
+                
+            }
 
+        }
+        
+        
+    }
+    CalculatePrice();
+}
+async function onEventCart(){
+    upDateKanapQuantity = document.getElementsByClassName("itemQuantity");
+    for (let i = 0; i < upDateKanapQuantity.length; i++) {
+        const element = upDateKanapQuantity[i];
+        upDateKanapQuantity[i].addEventListener('change', function(a){
+            a.preventDefault();
+            console.log(upDateKanapQuantity[i].value);;
+            upDateKanapQuantity[i].setAttribute("value",upDateKanapQuantity[i].value)
+            UpdateCart(upDateKanapQuantity[i],document.getElementsByClassName("cart__item")[i]);
+        });
+        
+    } 
+}
 
 
 async function main(){
-    let  kanapList = await GetKanapList();
+    var  kanapList = await GetKanapList();
     await setcartlist(kanapList);
     await CalculatePrice();
+    await onEventCart();
+     console.log(await upDateKanapQuantity)
     
 }
 

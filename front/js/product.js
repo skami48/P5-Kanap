@@ -59,6 +59,7 @@ let kanapList = [];
 getKanapElements(); //start
 
 
+
 let chart = document.getElementById("addToCart");
 chart.addEventListener("click",function(event){
     event.preventDefault();
@@ -75,6 +76,13 @@ chart.addEventListener("click",function(event){
         
             }
         }
+        
+        for( let i = 0 ; i < kanapList.length;i++){
+            if (kanapList[i] == undefined){
+                kanapList[i] = 0;
+            }
+        }
+        console.log(kanapList);
         localStorage.setItem(kanapID,kanapList);
     }
 

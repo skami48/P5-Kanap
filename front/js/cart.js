@@ -215,13 +215,103 @@ async function updateCart(kanapID, kanapColor, kanapNumber){
 }
 
 
+async function post(){
+
+    let storage = await LoadLocalStorage();
+    let oform =document.forms[0];
+    oform.addEventListener("submit",function(a){
+        a.preventDefault();
+        if(!(/^[a-zA-Z ]+$/.test(oform.firstName.value))){
+            let err = document.getElementById("firstNameErrorMsg").innerText ="Prenom Invalide";
+            return -1;
+        }else{
+            document.getElementById("firstNameErrorMsg").innerText = "";
+        }
+        if(!(/^[a-zA-Z ]+$/.test(oform.lastName.value))){
+            document.getElementById("lastNameErrorMsg").innerText = "Nom Invalide";
+            return -1
+        }else{
+            document.getElementById("lastNameErrorMsg").innerText = "";
+        }
+        if(!(/[A-Za-z0-9'\.\-\s\,]/.test(oform.address.value))){
+            document.getElementById("addressErrorMsg").innerText = "Adresse Invalide";
+            return -1
+        }else{
+            document.getElementById("addressErrorMsg").innerText = "";
+        }
+        if(!(/[A-Za-z0-9'\.\-\s\,]/.test(oform.city.value))){
+            document.getElementById("cityErrorMsg").innerText = "Ville Invalide";
+            return -1
+        }else{
+            document.getElementById("cityErrorMsg").innerText = "";
+        }
+        if(!(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(oform.email.value))){
+            document.getElementById("emailErrorMsg").innerText = "Email Invalide";
+            return -1
+        }else{
+            document.getElementById("emailErrorMsg").innerText = "";
+        }
+        let Packet ={
+            contact: {
+            firstName : oform.firstName.value,
+            lastName : oform.lastName.value,
+            address : oform.address.value,
+            city : oform.city.value,
+            email : oform.email.value,
+            },
+            products:[]
+        };
+
+        
+        let products = []
+
+        
+
+        for (let index = 0; index < storage.id.length; index++) {
+            const element = storage.id[index];
+            if(element != ""){
+                for (let x = 0; x < parseInt(storage.quantity[index]); x++) {
+                    
+                    Packet.products.push(element);
+                }
+            }
+            
+        }
+        
+        let topost= (JSON.stringify(Packet));
+        console.log(topost)
+        console.log("ivi")
+        fetch('http://localhost:3000/api/products/order', {
+        method: 'POST',
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+        },
+        body: topost,})
+                    .then(function(result){
+                                if(result.ok){
+                                return result.json()
+                                }
+                            })
+                    .then(function(a){
+                                window.location.href = 'confirmation.html?id='+ a.orderId
+                                })
+        
+    });
+}
+
+
+
 async function main(){
     let storage = await LoadLocalStorage();
     if (storage!= undefined){
         await fillcartElement(storage);
         await CalculatePrice();
         await onEventCart();
+        await post()
+
     }
+    
 }
 
 

@@ -46,7 +46,7 @@ async function addToCartButton(kanap, kanapID){
     
 
     if ( (parseInt(document.getElementById("quantity").value) == 0)||(document.getElementById("colors").value == 0)){
-        console.log("Leaving");
+        alert("erreur quantité ou Couleur pas selectionné")
         return -1;
     }
     if (store != undefined){

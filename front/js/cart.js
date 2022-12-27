@@ -1,13 +1,13 @@
 
 
 
-function addElement(type = "div",attribute = "", attributeValue = "",innerText){
+function addElement(type = "div",attribute = "", attributeValue = "",innerText){ // add element attribute + innertext give and array for attribute and attribute value for multiple addition
     let element = document.createElement(type);
     
 
 
-    console.log( " the type is " + typeof(attribute))
     
+    //check if attribute is a string or array
     if ( typeof(attribute) === 'string'){
         if(attribute!= ""){
             element.setAttribute(attribute,attributeValue);
@@ -41,7 +41,7 @@ function addElement(type = "div",attribute = "", attributeValue = "",innerText){
 
 
 
-async function LoadLocalStorage(){
+async function LoadLocalStorage(){  //Open local storage or return undefined if not exist
     let storage = await localStorage.getItem("chart")
     
         if( storage) {
@@ -53,7 +53,10 @@ async function LoadLocalStorage(){
         }
 }
 
-async function GetKanapList(){
+
+
+
+async function GetKanapList(){ //ask the list of kanap from the server
     let kanaplist = await fetch("http://127.0.0.1:3000/api/products/")
                                 .then(function(result){
                                     return result
@@ -65,7 +68,7 @@ async function GetKanapList(){
     
     return kanaplist
 }
-async function GetSingleKanap(KanapID){
+async function GetSingleKanap(KanapID){//ask one kanap for the ID from the server
     let kanaplist = await fetch("http://127.0.0.1:3000/api/products/"+KanapID)
                                 .then(function(result){
                                     return result
@@ -81,12 +84,12 @@ async function GetSingleKanap(KanapID){
 
 
 
-async function fillcartElement(storage){
+async function fillcartElement(storage){ //fill the page with kanap elements
 
     
 
 
-    for(let i =0 ; i < storage.id.length;i++){
+    for(let i =0 ; i < storage.id.length;i++){ 
 
         let elementNumber =  storage.id[i];
         
@@ -154,7 +157,7 @@ async function onEventCart(){
 }
 
 
-async function CalculatePrice(){
+async function CalculatePrice(){ // ask the server for the price and parse it to the page
     
     let storage = await LoadLocalStorage();
     let totalPrice = 0;
@@ -176,7 +179,7 @@ async function CalculatePrice(){
     document.getElementById("totalPrice").innerText = totalPrice;
 
 }
-async function deleteCart(kanapID, kanapColor){
+async function deleteCart(kanapID, kanapColor){ //delete element to from the store
     let store = await LoadLocalStorage();
     
 
@@ -204,7 +207,7 @@ async function deleteCart(kanapID, kanapColor){
     
 }
 
-async function updateCart(kanapID, kanapColor, kanapNumber){
+async function updateCart(kanapID, kanapColor, kanapNumber){// apply user change to localstorage
     let store = await LoadLocalStorage();
     
 
@@ -278,7 +281,6 @@ async function post(){
         };
 
         
-        let products = []
 
         
 
@@ -296,12 +298,12 @@ async function post(){
         let topost= (JSON.stringify(Packet));
 
         fetch('http://localhost:3000/api/products/order', {
-        method: 'POST',
-        headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-        },
-        body: topost,})
+                            method: 'POST',
+                            headers: {
+                                        'Accept': 'application/json',
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: topost,})
                     .then(function(result){
                                 if(result.ok){
                                 return result.json()

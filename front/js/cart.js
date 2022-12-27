@@ -1,8 +1,31 @@
+
+
+
 function addElement(type = "div",attribute = "", attributeValue = "",innerText){
     let element = document.createElement(type);
-    if(attribute!= ""){
-        element.setAttribute(attribute,attributeValue);
+    
 
+
+    console.log( " the type is " + typeof(attribute))
+    
+    if ( typeof(attribute) === 'string'){
+        if(attribute!= ""){
+            element.setAttribute(attribute,attributeValue);
+    
+        }
+
+    }else{
+        for (let index = 0; index < attribute.length; index++) {
+            attribute[index];
+            
+            if (attribute[index] != 0){
+                element.setAttribute(attribute[index],attributeValue[index]);
+                console.log(attributeValue[index])
+                
+            }
+            
+        }
+    
     }
     if(innerText!=undefined){
         element.innerText = innerText;
@@ -10,6 +33,7 @@ function addElement(type = "div",attribute = "", attributeValue = "",innerText){
     return element;
 
 }
+
 
 
 
@@ -65,20 +89,16 @@ async function fillcartElement(storage){
     for(let i =0 ; i < storage.id.length;i++){
 
         let elementNumber =  storage.id[i];
-        console.log (elementNumber)
+        
         if( (elementNumber!='')){
-            let kanap = await GetSingleKanap(elementNumber);
+
             
-            let article = document.createElement("article");
+            let kanap = await GetSingleKanap(elementNumber);
+            let article = addElement("article",["class","data-id","data-color"],["cart__item",storage.id[i],storage.color[i]]);
             let section = document.getElementById("cart__items");
             section.appendChild(article)
-            
-            article.setAttribute("class", "cart__item");
-            article.setAttribute("data-id", storage.id[i]);
-            article.setAttribute("data-color", storage.color[i]);
             let divImg = article.appendChild(addElement("div","class","cart__item__img"));
-            let image = divImg.appendChild(addElement("img","src",kanap.imageUrl));
-            image.setAttribute("alt",kanap.altTxt);
+            let image = divImg.appendChild(addElement("img",["src","alt"],[kanap.imageUrl,kanap.altTxt]));
             let content = article.appendChild(addElement("div","class","cart__item__content"));
             let contentDecription = content.appendChild(addElement("div","class","cart__item__content__description"));
             contentDecription.appendChild(addElement("h2","","",kanap.name));
@@ -87,12 +107,7 @@ async function fillcartElement(storage){
             let cart__item__content__settings  = content.appendChild(addElement("div","class","cart__item__content__settings"));
             let  cart__item__content__settings__quantity =  cart__item__content__settings.appendChild(addElement("div","class","cart__item__content__settings__quantity"));
             cart__item__content__settings__quantity.appendChild(addElement("p","","","Qté : "));
-            let cart_item_input = cart__item__content__settings__quantity.appendChild(addElement("input","type","number"));
-            cart_item_input.setAttribute("class","itemQuantity");
-            cart_item_input.setAttribute("name","itemQuantity");
-            cart_item_input.setAttribute("min","1");
-            cart_item_input.setAttribute("max","100");
-            cart_item_input.setAttribute("value",storage.quantity[i]);
+            let cart_item_input = cart__item__content__settings__quantity.appendChild(addElement("input",["type","class","name","min","max","value"],["number","itemQuantity","itemQuantity","1","100",storage.quantity[i]]));
             let cart__item__content__settings__delete = cart__item__content__settings.appendChild(addElement("div","class", "cart__item__content__settings__delete"));
             cart__item__content__settings__delete.appendChild(addElement("p","class","deleteItem","Supprimer"));
         }
@@ -110,7 +125,7 @@ async function onEventCart(){
         const element = KanapCart[i];
         
         let upDateKanapQuantity = element.getElementsByClassName("itemQuantity");
-        console.log((typeof(parseInt(upDateKanapQuantity[0].value))))
+        
         upDateKanapQuantity[0].addEventListener('change', function(a){
             a.preventDefault();
             
@@ -279,8 +294,7 @@ async function post(){
         }
         
         let topost= (JSON.stringify(Packet));
-        console.log(topost)
-        console.log("ivi")
+
         fetch('http://localhost:3000/api/products/order', {
         method: 'POST',
         headers: {

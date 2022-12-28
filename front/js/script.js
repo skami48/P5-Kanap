@@ -23,8 +23,9 @@ for (let i = 0 ;i < kanaplist.length;i++){
     liste.appendChild(element);
     //element.innerHTML= '<article><img src="'+kanaplist[i].imageUrl+'" alt="'+kanaplist[i].altTxt+'"><h3 class="productName">'+kanaplist[i].name+'</h3><p class="productDescription">'+kanaplist[i].description+'</p></article>';
     let article = element.appendChild (addElement("article"));
-    let img = article.appendChild(addElement("img","src",kanaplist[i].imageUrl));
-    img.setAttribute("alt",kanaplist[i].altTxt);
+    
+    let img = article.appendChild(addElement("img",["src","alt"],[kanaplist[i].imageUrl,kanaplist[i].altTxt]));
+    //img.setAttribute(alt,kanaplist[i].altTxt);
     article.appendChild(addElement("h3","class","productName",kanaplist[i].name));
     article.appendChild(addElement("p","class","productDescription",kanaplist[i].description));
 
@@ -32,11 +33,31 @@ for (let i = 0 ;i < kanaplist.length;i++){
 }
 }
 
-function addElement(type = "div",attribute = "", attributeValue = "",innerText){
+function addElement(type = "div",attribute = "", attributeValue = "",innerText){ // add element attribute + innertext give and array for attribute and attribute value for multiple addition
     let element = document.createElement(type);
-    if(attribute!= ""){
-        element.setAttribute(attribute,attributeValue);
+    
 
+
+    
+    //check if attribute is a string or array
+    if ( typeof(attribute) === 'string'){
+        if(attribute!= ""){
+            element.setAttribute(attribute,attributeValue);
+    
+        }
+
+    }else{
+        for (let index = 0; index < attribute.length; index++) {
+            attribute[index];
+            
+            if (attribute[index] != 0){
+                element.setAttribute(attribute[index],attributeValue[index]);
+                console.log(attributeValue[index])
+                
+            }
+            
+        }
+    
     }
     if(innerText!=undefined){
         element.innerText = innerText;

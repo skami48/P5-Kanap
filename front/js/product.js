@@ -45,7 +45,7 @@ async function addToCartButton(kanap, kanapID){
     let store = await LoadLocalStorage();
     
 
-    if ( (parseInt(document.getElementById("quantity").value) == 0)||(document.getElementById("colors").value == 0)){
+    if ( ((parseInt(document.getElementById("quantity").value) < 1) || (parseInt(document.getElementById("quantity").value) > 100)) ||(document.getElementById("colors").value == 0 || (parseInt(document.getElementById("quantity").value) == null))){
         alert("erreur quantité ou Couleur pas selectionné")
         return -1;
     }

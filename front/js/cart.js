@@ -117,7 +117,7 @@ async function onEventCart(){
         upDateKanapQuantity[0].addEventListener('change', function(a){
             a.preventDefault();
             upDateKanapQuantity[0].setAttribute("value",parseInt(upDateKanapQuantity[0].value))
-            if((upDateKanapQuantity[0].value == 0) || (typeof(parseInt(upDateKanapQuantity[0].value))!= 'number' )){
+            if((upDateKanapQuantity[0].value <= 0) || (typeof(parseInt(upDateKanapQuantity[0].value))!= 'number' )){
                 upDateKanapQuantity[0].value = 1 ;
                 upDateKanapQuantity[0].setAttribute("value",upDateKanapQuantity[0].value)
             }

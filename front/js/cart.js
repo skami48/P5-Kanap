@@ -11,7 +11,7 @@ function addElement(type = "div",attribute = "", attributeValue = "",innerText){
             attribute[index];
             if (attribute[index] != 0){
                 element.setAttribute(attribute[index],attributeValue[index]);
-                console.log(attributeValue[index]) 
+                //console.log(attributeValue[index]) 
             }
         }
     }
@@ -25,7 +25,7 @@ function addElement(type = "div",attribute = "", attributeValue = "",innerText){
 
 
 async function LoadLocalStorage(){  //Open local storage or return undefined if not exist
-    let storage = await localStorage.getItem("chart")
+    let storage =  localStorage.getItem("chart")
         if( storage) {
             return JSON.parse(storage);
         }else{
@@ -36,29 +36,41 @@ async function LoadLocalStorage(){  //Open local storage or return undefined if 
 
 
 
-async function GetKanapList(){ //ask the list of kanap from the server
-    let kanaplist = await fetch("http://127.0.0.1:3000/api/products/")
+function GetKanapList(){ //ask the list of kanap from the server
+    let kanaplist =  fetch("http://127.0.0.1:3000/api/products/")
                                 .then(function(result){
-                                    return result
-                                }).catch(function(err){
+                                    if(result.ok){
+                                        return result.json();
+                                }
+                                })
+                                .then(function(a){
+                                   return a
+                                })
+                                .catch(function(err){
                                     console.log(err)
-                                    return err
+                                    return 'err'
                                 });
-    kanaplist = await kanaplist.json();
+    
     return kanaplist
 }
 
 
 
 async function GetSingleKanap(KanapID){//ask one kanap for the ID from the server
-    let kanaplist = await fetch("http://127.0.0.1:3000/api/products/"+KanapID)
+    let kanaplist =  fetch("http://127.0.0.1:3000/api/products/"+KanapID)
                                 .then(function(result){
-                                    return result
-                                }).catch(function(err){
+                                    if(result.ok){
+                                        return result.json();
+                                }
+                                })
+                                .then(function(a){
+                                    return a
+                                })
+                                .catch(function(err){
                                     console.log(err)
-                                    return err
+                                    return 'err'
                                 });
-    kanaplist = await kanaplist.json();
+    
     return kanaplist
 }
 
@@ -67,6 +79,7 @@ async function GetSingleKanap(KanapID){//ask one kanap for the ID from the serve
 
 async function fillcartElement(storage){ //fill the page with kanap elements
     for(let i =0 ; i < storage.id.length;i++){ 
+        
         let elementNumber =  storage.id[i];
 
         if( (elementNumber!='')){
@@ -80,7 +93,9 @@ async function fillcartElement(storage){ //fill the page with kanap elements
             let content = article.appendChild(addElement("div","class","cart__item__content"));
             let contentDecription = content.appendChild(addElement("div","class","cart__item__content__description"));
             contentDecription.appendChild(addElement("h2","","",kanap.name));
-            contentDecription.appendChild(addElement("p","","","Couleur : " + kanap.colors[i]));
+            let kanapColor = kanap.colors[i];
+            console.log(kanapColor);
+            contentDecription.appendChild(addElement("p","","","Couleur : " + storage.color[i]));
             contentDecription.appendChild(addElement("p","","",`Prix : ${kanap.price} €`));
             let cart__item__content__settings  = content.appendChild(addElement("div","class","cart__item__content__settings"));
             let  cart__item__content__settings__quantity =  cart__item__content__settings.appendChild(addElement("div","class","cart__item__content__settings__quantity"));
@@ -115,7 +130,7 @@ async function onEventCart(){
 
         let DeleteButton = element.getElementsByClassName("deleteItem");
         DeleteButton[0].addEventListener("click", function(b){
-            deleteCart(KanapCart[i].getAttribute("data-id"),KanapCart[i].getAttribute("data-color")).then(function(bb){
+            deleteCart(element.getAttribute("data-id"),element.getAttribute("data-color")).then(function(bb){
                 CalculatePrice();
             });
             element.remove();

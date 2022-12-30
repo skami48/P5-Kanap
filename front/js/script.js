@@ -21,11 +21,9 @@ for (let i = 0 ;i < kanaplist.length;i++){
     element.setAttribute("href", "./product.html?id="+kanaplist[i]._id)
 
     liste.appendChild(element);
-    //element.innerHTML= '<article><img src="'+kanaplist[i].imageUrl+'" alt="'+kanaplist[i].altTxt+'"><h3 class="productName">'+kanaplist[i].name+'</h3><p class="productDescription">'+kanaplist[i].description+'</p></article>';
     let article = element.appendChild (addElement("article"));
     
     let img = article.appendChild(addElement("img",["src","alt"],[kanaplist[i].imageUrl,kanaplist[i].altTxt]));
-    //img.setAttribute(alt,kanaplist[i].altTxt);
     article.appendChild(addElement("h3","class","productName",kanaplist[i].name));
     article.appendChild(addElement("p","class","productDescription",kanaplist[i].description));
 
@@ -52,7 +50,7 @@ function addElement(type = "div",attribute = "", attributeValue = "",innerText){
             
             if (attribute[index] != 0){
                 element.setAttribute(attribute[index],attributeValue[index]);
-                console.log(attributeValue[index])
+                console.log(attributeValue[index]);
                 
             }
             

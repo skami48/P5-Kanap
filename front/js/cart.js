@@ -8,7 +8,7 @@ function addElement(type = "div",attribute = "", attributeValue = "",innerText){
         }
     }else{
         for (let index = 0; index < attribute.length; index++) {
-            attribute[index];
+            
             if (attribute[index] != 0){
                 element.setAttribute(attribute[index],attributeValue[index]);
                 //console.log(attributeValue[index]) 
@@ -44,11 +44,11 @@ function GetKanapList(){ //ask the list of kanap from the server
                                 }
                                 })
                                 .then(function(a){
-                                   return a
+                                   return a;
                                 })
                                 .catch(function(err){
-                                    console.log(err)
-                                    return 'err'
+                                    console.log(err);
+                                    return 'err';
                                 });
     
     return kanaplist
@@ -64,14 +64,14 @@ async function GetSingleKanap(KanapID){//ask one kanap for the ID from the serve
                                 }
                                 })
                                 .then(function(a){
-                                    return a
+                                    return a;
                                 })
                                 .catch(function(err){
-                                    console.log(err)
-                                    return 'err'
+                                    console.log(err);
+                                    return 'err';
                                 });
     
-    return kanaplist
+    return kanaplist;
 }
 
 
@@ -87,7 +87,7 @@ async function fillcartElement(storage){ //fill the page with kanap elements
             let kanap = await GetSingleKanap(elementNumber);
             let article = addElement("article",["class","data-id","data-color"],["cart__item",storage[i].id,storage[i].color]);
             let section = document.getElementById("cart__items");
-            section.appendChild(article)
+            section.appendChild(article);
             let divImg = article.appendChild(addElement("div","class","cart__item__img"));
             let image = divImg.appendChild(addElement("img",["src","alt"],[kanap.imageUrl,kanap.altTxt]));
             let content = article.appendChild(addElement("div","class","cart__item__content"));
@@ -116,12 +116,12 @@ async function onEventCart(){
         let upDateKanapQuantity = element.getElementsByClassName("itemQuantity");
         upDateKanapQuantity[0].addEventListener('change', function(a){
             a.preventDefault();
-            upDateKanapQuantity[0].setAttribute("value",parseInt(upDateKanapQuantity[0].value))
+            upDateKanapQuantity[0].setAttribute("value",parseInt(upDateKanapQuantity[0].value));
             if((upDateKanapQuantity[0].value <= 0) || (typeof(parseInt(upDateKanapQuantity[0].value))!= 'number' )){
                 upDateKanapQuantity[0].value = 1 ;
-                upDateKanapQuantity[0].setAttribute("value",upDateKanapQuantity[0].value)
+                upDateKanapQuantity[0].setAttribute("value",upDateKanapQuantity[0].value);
             }
-            upDateKanapQuantity[0].value = parseInt(upDateKanapQuantity[0].value)
+            upDateKanapQuantity[0].value = parseInt(upDateKanapQuantity[0].value);
             updateCart(KanapCart[i].getAttribute("data-id"),KanapCart[i].getAttribute("data-color"),parseInt(upDateKanapQuantity[0].value))
                 .then(function priceupdate(aa){
                 CalculatePrice();
@@ -167,8 +167,7 @@ async function deleteCart(kanapID, kanapColor){ //delete element to from the sto
             const element = store[i].id;
             if(element== kanapID && kanapColor == store[i].color){
                 store.splice(i,1);
-                //store.color.splice(i,1);
-                //store.quantity.splice(i,1);
+
                 localStorage.setItem("chart",JSON.stringify(store));
                 console.log(store.length);
                 if (store.length == 0){
@@ -266,11 +265,11 @@ async function post(){
                                     body: topost,})
                     .then(function(result){
                                 if(result.ok){
-                                return result.json()
+                                return result.json();
                                 }
                             })
                     .then(function(a){
-                                window.location.href = 'confirmation.html?id='+ a.orderId
+                                window.location.href = 'confirmation.html?id='+ a.orderId;
                                 })
     });
 }
@@ -283,7 +282,7 @@ async function main(){
         await fillcartElement(storage);
         await CalculatePrice();
         await onEventCart();
-        await post()
+        await post();
 
     }
     

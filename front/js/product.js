@@ -95,21 +95,10 @@ async function addToCartButton(kanap, kanapID){
         alert("element ajouté au panier")
         return 0
     }
-    let list = [];
-    list.push(ElementCart);
-    console.log(list)
-    list[list.length-1].id = "yolo";
-    list[list.length-1].color = "coloris" ;
-    list[list.length-1].quantity = 45;
-    list.push(ElementCart);
-    console.log(list)
-    list[list.length-1].id = "carotte";
-    list[list.length-1].color = "red" ;
-    list[list.length-1].quantity = 10;
-    localStorage.setItem("chausette",JSON.stringify(list));
+
    
     
-    return 0
+ 
 }
 
 async function LoadLocalStorage(){

@@ -145,16 +145,20 @@ async function CalculatePrice(){ // ask the server for the price and parse it to
     let storage = await LoadLocalStorage();
     let totalPrice = 0;
     let totalKanap = 0;
-    for (let i = 0; i < await storage.length; i++) {
-        const element = storage[i].id;
-        if (element != ""){
-            let kanap = await GetSingleKanap(element);
-            totalKanap += parseInt(storage[i].quantity);
-            totalPrice += parseInt(kanap.price) * parseInt(storage[i].quantity);
+    if (storage!=undefined) {
+        for (let i = 0; i < await storage.length; i++) {
+            const element = storage[i].id;
+            if (element != ""){
+                let kanap = await GetSingleKanap(element);
+                totalKanap += parseInt(storage[i].quantity);
+                totalPrice += parseInt(kanap.price) * parseInt(storage[i].quantity);
+            }
+    
+            
         }
-
         
     }
+    
     
     document.getElementById("totalQuantity").innerText = totalKanap ;
     document.getElementById("totalPrice").innerText = totalPrice;

@@ -44,11 +44,9 @@ function fillElements(serverValue){ // fill the page with info
 async function addToCartButton(kanap, kanapID){
     let store = await LoadLocalStorage();
     
-
-    if ( ((parseInt(document.getElementById("quantity").value) < 1) || 
-          (parseInt(document.getElementById("quantity").value) > 100)) ||
-          (document.getElementById("colors").value == 0 || 
-          (parseInt(document.getElementById("quantity").value) == null))){
+   
+    if ( ((parseInt(document.getElementById("quantity").value) < 1) || (parseInt(document.getElementById("quantity").value) > 100)) ||
+          ((document.getElementById("colors").value == 0 )||(isNaN((parseInt(document.getElementById("quantity").value))) ))){
 
         alert("erreur quantité ou Couleur pas selectionné");
         return -1;
@@ -61,6 +59,7 @@ async function addToCartButton(kanap, kanapID){
             console.log("kanapID " + chosenColor);
             console.log("element "+ store[i].color);
             if(store[i].id == kanapID && chosenColor == store[i].color){
+                console.log( parseInt(store[i].quantity)+ parseInt(document.getElementById("quantity").value))
                 store[i].quantity = parseInt(store[i].quantity)+ parseInt(document.getElementById("quantity").value);
                 localStorage.setItem("chart",JSON.stringify(store));
                 alert("element ajouté au panier");
@@ -73,7 +72,7 @@ async function addToCartButton(kanap, kanapID){
         store.push(ElementCart);
         store[store.length-1].id=kanapID;
         store[store.length-1].color = document.getElementById("colors").value;
-        store[store.length-1].quantity = document.getElementById("quantity").value;
+        store[store.length-1].quantity = parseInt(document.getElementById("quantity").value);
 
         localStorage.setItem("chart",JSON.stringify(store));
         alert("element ajouté au panier");
@@ -83,7 +82,7 @@ async function addToCartButton(kanap, kanapID){
         store.push(ElementCart);
         store[store.length-1].id = kanapID;
         store[store.length-1].color = document.getElementById("colors").value ;
-
+        store[store.length-1].quantity = parseInt(document.getElementById("quantity").value) ;
         localStorage.setItem("chart",JSON.stringify(store));
         alert("element ajouté au panier");
         return 0;

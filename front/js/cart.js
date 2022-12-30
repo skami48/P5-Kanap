@@ -24,7 +24,7 @@ function addElement(type = "div",attribute = "", attributeValue = "",innerText){
 
 
 
-async function LoadLocalStorage(){  //Open local storage or return undefined if not exist
+function LoadLocalStorage(){  //Open local storage or return undefined if not exist
     let storage =  localStorage.getItem("chart")
         if( storage) {
             return JSON.parse(storage);
@@ -78,14 +78,14 @@ async function GetSingleKanap(KanapID){//ask one kanap for the ID from the serve
 
 
 async function fillcartElement(storage){ //fill the page with kanap elements
-    for(let i =0 ; i < storage.id.length;i++){ 
+    for(let i =0 ; i < storage.length;i++){ 
         
-        let elementNumber =  storage.id[i];
+        let elementNumber =  storage[i].id;
 
         if( (elementNumber!='')){
 
             let kanap = await GetSingleKanap(elementNumber);
-            let article = addElement("article",["class","data-id","data-color"],["cart__item",storage.id[i],storage.color[i]]);
+            let article = addElement("article",["class","data-id","data-color"],["cart__item",storage[i].id,storage[i].color]);
             let section = document.getElementById("cart__items");
             section.appendChild(article)
             let divImg = article.appendChild(addElement("div","class","cart__item__img"));
@@ -95,12 +95,12 @@ async function fillcartElement(storage){ //fill the page with kanap elements
             contentDecription.appendChild(addElement("h2","","",kanap.name));
             let kanapColor = kanap.colors[i];
             console.log(kanapColor);
-            contentDecription.appendChild(addElement("p","","","Couleur : " + storage.color[i]));
+            contentDecription.appendChild(addElement("p","","","Couleur : " + storage[i].color));
             contentDecription.appendChild(addElement("p","","",`Prix : ${kanap.price} €`));
             let cart__item__content__settings  = content.appendChild(addElement("div","class","cart__item__content__settings"));
             let  cart__item__content__settings__quantity =  cart__item__content__settings.appendChild(addElement("div","class","cart__item__content__settings__quantity"));
             cart__item__content__settings__quantity.appendChild(addElement("p","","","Qté : "));
-            let cart_item_input = cart__item__content__settings__quantity.appendChild(addElement("input",["type","class","name","min","max","value"],["number","itemQuantity","itemQuantity","1","100",storage.quantity[i]]));
+            let cart_item_input = cart__item__content__settings__quantity.appendChild(addElement("input",["type","class","name","min","max","value"],["number","itemQuantity","itemQuantity","1","100",storage[i].quantity]));
             let cart__item__content__settings__delete = cart__item__content__settings.appendChild(addElement("div","class", "cart__item__content__settings__delete"));
             cart__item__content__settings__delete.appendChild(addElement("p","class","deleteItem","Supprimer"));
         
@@ -145,12 +145,12 @@ async function CalculatePrice(){ // ask the server for the price and parse it to
     let storage = await LoadLocalStorage();
     let totalPrice = 0;
     let totalKanap = 0;
-    for (let i = 0; i < await storage.id.length; i++) {
-        const element = storage.id[i];
+    for (let i = 0; i < await storage.length; i++) {
+        const element = storage[i].id;
         if (element != ""){
             let kanap = await GetSingleKanap(element);
-            totalKanap += parseInt(storage.quantity[i]);
-            totalPrice += parseInt(kanap.price) * parseInt(storage.quantity[i]);
+            totalKanap += parseInt(storage[i].quantity);
+            totalPrice += parseInt(kanap.price) * parseInt(storage[i].quantity);
         }
 
         
@@ -163,13 +163,17 @@ async function CalculatePrice(){ // ask the server for the price and parse it to
 async function deleteCart(kanapID, kanapColor){ //delete element to from the store
     let store = await LoadLocalStorage();
     if (store != undefined){
-        for (let i = 0; i <store.id.length  ; i++) {
-            const element = store.id[i];
-            if(store.id[i] == kanapID && kanapColor == store.color[i]){
-                store.id.splice(i,1);
-                store.color.splice(i,1);
-                store.quantity.splice(i,1);
+        for (let i = 0; i <store.length  ; i++) {
+            const element = store[i].id;
+            if(element== kanapID && kanapColor == store[i].color){
+                store.splice(i,1);
+                //store.color.splice(i,1);
+                //store.quantity.splice(i,1);
                 localStorage.setItem("chart",JSON.stringify(store));
+                console.log(store.length);
+                if (store.length == 0){
+                    localStorage.removeItem("chart");
+                }
                 return 0
             }
         }
@@ -179,10 +183,10 @@ async function deleteCart(kanapID, kanapColor){ //delete element to from the sto
 async function updateCart(kanapID, kanapColor, kanapNumber){// apply user change to localstorage
     let store = await LoadLocalStorage();
     if (store != undefined){
-        for (let i = 0; i <store.id.length  ; i++) {
-            const element = store.id[i];
-            if(store.id[i] == kanapID && kanapColor == store.color[i]){
-                store.quantity[i] = parseInt(kanapNumber);
+        for (let i = 0; i <store.length  ; i++) {
+            const element = store[i].id;
+            if(store[i].id == kanapID && kanapColor == store[i].color){
+                store[i].quantity = parseInt(kanapNumber);
                 localStorage.setItem("chart",JSON.stringify(store));
                 return 0
             }
@@ -242,11 +246,11 @@ async function post(){
 
         
 
-        for (let index = 0; index < storage.id.length; index++) {
-            const element = storage.id[index];
+        for (let index = 0; index < storage.length; index++) {
+            const element = storage[index];
             if(element != ""){
-                for (let x = 0; x < parseInt(storage.quantity[index]); x++) {
-                    Packet.products.push(element);
+                for (let x = 0; x < parseInt(storage[index].quantity); x++) {
+                    Packet.products.push(element.id);
                 }
             }
             

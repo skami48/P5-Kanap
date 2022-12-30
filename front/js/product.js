@@ -45,46 +45,71 @@ async function addToCartButton(kanap, kanapID){
     let store = await LoadLocalStorage();
     
 
-    if ( ((parseInt(document.getElementById("quantity").value) < 1) || (parseInt(document.getElementById("quantity").value) > 100)) ||(document.getElementById("colors").value == 0 || (parseInt(document.getElementById("quantity").value) == null))){
+    if ( ((parseInt(document.getElementById("quantity").value) < 1) || 
+          (parseInt(document.getElementById("quantity").value) > 100)) ||
+          (document.getElementById("colors").value == 0 || 
+          (parseInt(document.getElementById("quantity").value) == null))){
+
         alert("erreur quantité ou Couleur pas selectionné")
         return -1;
     }
     if (store != undefined){
-        console.log("store.length "+store.id.length);
+        console.log("store.length "+ store.length);
         let chosenColor = document.getElementById("colors").value;
-        for (let i = 0; i <store.id.length  ; i++) {
-            const element = store.id[i];
+        for (let i = 0; i <store.length  ; i++) {
+            const element = store[i];
             console.log("kanapID " + chosenColor);
-            console.log("element "+ store.color[i]);
-            if(store.id[i] == kanapID && chosenColor == store.color[i]){
-                store.quantity[i] = parseInt(store.quantity[i])+ parseInt(document.getElementById("quantity").value);
+            console.log("element "+ store[i].color);
+            if(store[i].id == kanapID && chosenColor == store[i].color){
+                store[i].quantity = parseInt(store[i].quantity)+ parseInt(document.getElementById("quantity").value);
                 localStorage.setItem("chart",JSON.stringify(store));
+                alert("element ajouté au panier")
                 return 0
                 
 
             }
             
         }
-        store.id.push(kanapID);
-        store.color.push(document.getElementById("colors").value);
-        store.quantity.push(document.getElementById("quantity").value);
+        store.push(ElementCart);
+        store[store.length-1].id=kanapID;
+        store[store.length-1].color = document.getElementById("colors").value;
+        store[store.length-1].quantity = document.getElementById("quantity").value;
+        //store.color.push(document.getElementById("colors").value);
+        //store.quantity.push(document.getElementById("quantity").value);
         localStorage.setItem("chart",JSON.stringify(store));
+        alert("element ajouté au panier")
         return 0
     }else{
-        store = chart
-        store.id.push(kanapID);
+        store = [];
+        store.push(ElementCart);
+        store[store.length-1].id = kanapID;
+        store[store.length-1].color = document.getElementById("colors").value ;
+        store[store.length-1].quantity = document.getElementById("quantity").value;
        
-        let color = (document.getElementById("colors").value);
+        /*let color = (document.getElementById("colors").value);
         console.log(color);
         store.color.push(color);
         let quantity = document.getElementById("quantity").value
-        store.quantity.push(quantity);
+        store.quantity.push(quantity);*/
         localStorage.setItem("chart",JSON.stringify(store));
+        alert("element ajouté au panier")
         return 0
     }
+    let list = [];
+    list.push(ElementCart);
+    console.log(list)
+    list[list.length-1].id = "yolo";
+    list[list.length-1].color = "coloris" ;
+    list[list.length-1].quantity = 45;
+    list.push(ElementCart);
+    console.log(list)
+    list[list.length-1].id = "carotte";
+    list[list.length-1].color = "red" ;
+    list[list.length-1].quantity = 10;
+    localStorage.setItem("chausette",JSON.stringify(list));
    
     
-
+    return 0
 }
 
 async function LoadLocalStorage(){
@@ -105,7 +130,15 @@ let chart= {
     color: [],
     quantity : []
 
-}
+};
+
+let ElementCart= {
+    id : "",
+    color : "",
+    quantity :""
+
+};
+
 
 async function main(){
     const queryString = window.location.search;

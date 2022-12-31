@@ -200,10 +200,11 @@ async function updateCart(kanapID, kanapColor, kanapNumber){// apply user change
 
 async function post(){
 
-    let storage = await LoadLocalStorage();
+    
     let oform =document.forms[0];
-    oform.addEventListener("submit",function(a){
+    oform.addEventListener("submit",async function(a){
         a.preventDefault();
+        let storage = await LoadLocalStorage();
         if(!(/^[a-zA-Z ]+$/.test(oform.firstName.value))){
             let err = document.getElementById("firstNameErrorMsg").innerText ="Prenom Invalide";
             return -1;
@@ -247,20 +248,20 @@ async function post(){
 
         
 
-        
+        if(storage!= undefined){
 
-        for (let index = 0; index < storage.length; index++) {
-            const element = storage[index];
-            if(element != ""){
-                for (let x = 0; x < parseInt(storage[index].quantity); x++) {
-                    Packet.products.push(element.id);
+            for (let index = 0; index < storage.length; index++) {
+                const element = storage[index];
+                if(element != ""){
+                    for (let x = 0; x < parseInt(storage[index].quantity); x++) {
+                        Packet.products.push(element.id);
+                    }
                 }
-            }
             
-        }
+            }
         
-        let topost= (JSON.stringify(Packet));
-        fetch('http://localhost:3000/api/products/order', {
+            let topost= (JSON.stringify(Packet));
+            fetch('http://localhost:3000/api/products/order', {
                             method: 'POST',
                             headers: {
                                         'Accept': 'application/json',
@@ -275,7 +276,13 @@ async function post(){
                     .then(function(a){
                                 window.location.href = 'confirmation.html?id='+ a.orderId;
                                 })
-    });
+              }else{
+                alert("le panier est vide !");
+                return -1;
+
+              }      
+        });
+                    
 }
 
 
@@ -286,9 +293,10 @@ async function main(){
         await fillcartElement(storage);
         await CalculatePrice();
         await onEventCart();
-        await post();
+        
 
     }
+    await post();
     
 }
 

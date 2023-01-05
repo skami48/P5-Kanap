@@ -6,7 +6,7 @@ async function GetSingleKanap(KanapID){
                                 .then(function(result){
                                     return result;
                                 }).catch(function(err){
-                                    console.log(err);
+                                    console.log("connection au serveur impossible");
                                     return err;
                                 });
     kanaplist = await kanaplist.json();
@@ -52,14 +52,13 @@ async function addToCartButton(kanap, kanapID){
         return -1;
     }
     if (store != undefined){
-        console.log("store.length "+ store.length);
+
         let chosenColor = document.getElementById("colors").value;
         for (let i = 0; i <store.length  ; i++) {
             const element = store[i];
-            console.log("kanapID " + chosenColor);
-            console.log("element "+ store[i].color);
+
             if(store[i].id == kanapID && chosenColor == store[i].color){
-                console.log( parseInt(store[i].quantity)+ parseInt(document.getElementById("quantity").value))
+            
                 store[i].quantity = parseInt(store[i].quantity)+ parseInt(document.getElementById("quantity").value);
                 localStorage.setItem("chart",JSON.stringify(store));
                 alert("element ajouté au panier");
@@ -121,7 +120,7 @@ async function main(){
 
     const urlParams = new URLSearchParams(queryString);
     const kanapID = urlParams.get('id');
-    console.log(kanapID);
+  
     var  kanap = await GetSingleKanap(kanapID);
     await fillElements(kanap);
     let chart = document.getElementById("addToCart");

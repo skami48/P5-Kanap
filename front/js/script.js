@@ -3,7 +3,7 @@ function getKanapElements(){  //Call API to get kanap list
         if(result.ok){
             return result.json();}})
         .then(function(value){
-            console.log(value);
+            
             parsekanapelements(value);
         })
         .catch(function(err){
@@ -50,7 +50,7 @@ function addElement(type = "div",attribute = "", attributeValue = "",innerText){
             
             if (attribute[index] != 0){
                 element.setAttribute(attribute[index],attributeValue[index]);
-                console.log(attributeValue[index]);
+                
                 
             }
             

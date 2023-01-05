@@ -11,7 +11,7 @@ function addElement(type = "div",attribute = "", attributeValue = "",innerText){
             
             if (attribute[index] != 0){
                 element.setAttribute(attribute[index],attributeValue[index]);
-                //console.log(attributeValue[index]) 
+         
             }
         }
     }
@@ -47,7 +47,7 @@ function GetKanapList(){ //ask the list of kanap from the server
                                    return a;
                                 })
                                 .catch(function(err){
-                                    console.log(err);
+                                    console.log("connection au serveur impossible");
                                     return 'err';
                                 });
     
@@ -67,7 +67,7 @@ async function GetSingleKanap(KanapID){//ask one kanap for the ID from the serve
                                     return a;
                                 })
                                 .catch(function(err){
-                                    console.log(err);
+                                    console.log("connection au serveur impossible");
                                     return 'err';
                                 });
     
@@ -94,7 +94,7 @@ async function fillcartElement(storage){ //fill the page with kanap elements
             let contentDecription = content.appendChild(addElement("div","class","cart__item__content__description"));
             contentDecription.appendChild(addElement("h2","","",kanap.name));
             let kanapColor = kanap.colors[i];
-            console.log(kanapColor);
+  
             contentDecription.appendChild(addElement("p","","","Couleur : " + storage[i].color));
             contentDecription.appendChild(addElement("p","","",`Prix : ${kanap.price} €`));
             let cart__item__content__settings  = content.appendChild(addElement("div","class","cart__item__content__settings"));
@@ -122,7 +122,7 @@ async function onEventCart(){
                 upDateKanapQuantity[0].setAttribute("value",upDateKanapQuantity[0].value);
             }
             upDateKanapQuantity[0].value = parseInt(upDateKanapQuantity[0].value);
-            updateCart(KanapCart[i].getAttribute("data-id"),KanapCart[i].getAttribute("data-color"),parseInt(upDateKanapQuantity[0].value))
+            updateCart(element.getAttribute("data-id"),element.getAttribute("data-color"),parseInt(upDateKanapQuantity[0].value))
                 .then(function priceupdate(aa){
                 CalculatePrice();
             });
@@ -173,7 +173,7 @@ async function deleteCart(kanapID, kanapColor){ //delete element to from the sto
                 store.splice(i,1);
 
                 localStorage.setItem("chart",JSON.stringify(store));
-                console.log(store.length);
+
                 if (store.length == 0){
                     localStorage.removeItem("chart");
                 }

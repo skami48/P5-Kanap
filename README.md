@@ -1,5 +1,13 @@
 # Kanap #
 
+Projet realisé durant la Formation OpenClassRooms Developpeur Web
+pour ce projet le back end etais fournis et mon role est de coder le site le fontionnement du site coté Front End comment les requetes sont faites vers l'API
+comment le panier est remplis et passer commande
+
+
+voici le contenus du readme original pour installer le projet
+
+
 This is the front end and back end server for Project 5 of the Web Developer path.
 
 ### Back end Prerequisites ###
